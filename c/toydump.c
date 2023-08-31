@@ -1,6 +1,7 @@
 #include "analyze.h"
 #include <arpa/inet.h>
-#include <bits/types/struct_timeval.h>
+#include <bits/getopt_core.h>
+#include <getopt.h>
 #include <linux/if.h>
 #include <net/ethernet.h>
 #include <netinet/if_ether.h>
@@ -123,14 +124,42 @@ void createPcapFile(unsigned char *buf, int size, FILE *fp) {
   fflush(fp);
 }
 
-int main(int argc, char *argv[], char *envp[]) {
+struct option long_options[] = {
+    {"help", no_argument, NULL, 'h'},
+    {"interface", required_argument, NULL, 'i'},
+    {"write", required_argument, NULL, 'w'},
+    {0, 0, 0, 0},
+};
+
+int main(int argc, char *const argv[], char *envp[]) {
   int soc;
   u_int32_t size;
   unsigned char buf[65535] = {0};
 
   if (argc <= 1) {
-    fprintf(stderr, "pcap [device-name]\n");
+    fprintf(stderr, "toydump [device-name]\n");
     return 1;
+  }
+
+  int opt;
+  if ((opt = getopt_long(argc, argv, "hi:w:", long_options, 0)) == -1) {
+    fprintf(stderr, "failed to getopt_long\n");
+    return -1;
+  } else {
+    switch (opt) {
+    case 'h':
+      fprintf(stderr, "help option!!!!");
+      break;
+    case 'i':
+      fprintf(stderr, "interface option!!!!: %s", optarg);
+      break;
+    case 'w':
+      fprintf(stderr, "write to file option!!!!: %s", optarg);
+      break;
+    default:
+      fprintf(stderr, "invalid option\n");
+      return -1;
+    }
   }
 
   if ((soc = initRawSocket(argv[1], 1, 0)) == -1) {

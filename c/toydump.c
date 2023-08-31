@@ -131,6 +131,22 @@ struct option long_options[] = {
     {0, 0, 0, 0},
 };
 
+void toydump_help() {
+  printf(" _____               _                       \n"
+         "|_   _|             | |                      \n"
+         "  | | ___  _   _  __| |_   _ _ __ ___  _ __  \n"
+         "  | |/ _ \\| | | |/ _` | | | | '_ ` _ \\| '_ \\ \n"
+         "  | | (_) | |_| | (_| | |_| | | | | | | |_) |\n"
+         "  \\_/\\___/ \\__, |\\__,_|\\__,_|_| |_| |_| .__/ \n"
+         "           __/ |                      | |    \n"
+         "          |___/                       |_|\n");
+  printf("options\n");
+  printf("\t--help\n\t-h\t\tShow this help messages.\n");
+  printf("\t--interface\n\t-i\t\tSpecify network interface to be used for "
+         "capture.\n");
+  printf("\t--write\n\t-w\t\tSpecify the output file.\n");
+}
+
 int main(int argc, char *const argv[], char *envp[]) {
   int soc;
   u_int32_t size;
@@ -148,7 +164,7 @@ int main(int argc, char *const argv[], char *envp[]) {
   } else {
     switch (opt) {
     case 'h':
-      fprintf(stderr, "help option!!!!");
+      toydump_help();
       break;
     case 'i':
       fprintf(stderr, "interface option!!!!: %s", optarg);

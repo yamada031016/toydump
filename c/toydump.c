@@ -158,19 +158,18 @@ int main(int argc, char *const argv[], char *envp[]) {
   }
 
   int opt;
-  if ((opt = getopt_long(argc, argv, "hi:w:", long_options, 0)) == -1) {
-    fprintf(stderr, "failed to getopt_long\n");
-    return -1;
-  } else {
+  char nwdev[20];
+  char output_name[30] = "test.pcap";
+  while ((opt = getopt_long(argc, argv, "hi:w:", long_options, 0)) != -1) {
     switch (opt) {
     case 'h':
       toydump_help();
       break;
     case 'i':
-      fprintf(stderr, "interface option!!!!: %s", optarg);
+      snprintf(nwdev, sizeof(nwdev), optarg);
       break;
     case 'w':
-      fprintf(stderr, "write to file option!!!!: %s", optarg);
+      snprintf(output_name, sizeof(output_name), optarg);
       break;
     default:
       fprintf(stderr, "invalid option\n");
@@ -178,13 +177,13 @@ int main(int argc, char *const argv[], char *envp[]) {
     }
   }
 
-  if ((soc = initRawSocket(argv[1], 1, 0)) == -1) {
-    fprintf(stderr, "initRawSocket():Error %s\n", argv[1]);
+  if ((soc = initRawSocket(nwdev, 1, 0)) == -1) {
+    fprintf(stderr, "initRawSocket():Error %s\n", nwdev);
     return -1;
   }
 
   FILE *fp;
-  fp = fopen("test.pcap", "wb");
+  fp = fopen(output_name, "wb");
   if (fp == NULL) {
     fprintf(stderr, "failed to create pcap file\n");
     return 1;

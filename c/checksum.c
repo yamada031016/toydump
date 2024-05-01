@@ -56,6 +56,7 @@ u_int16_t checksum(unsigned char *data, int len) {
 
   return (~sum);
 }
+
 u_int16_t checksum2(unsigned char *data1, int len1, u_char *data2, int len2) {
   register u_int32_t sum;
   register u_int16_t *ptr;

@@ -1,0 +1,10 @@
+21:31:49 **** Incremental Build of configuration Debug for project mtk3bsp_nucleo_stm32h723 ****
+make -j12 all 
+arm-none-eabi-size   mtk3bsp_nucleo_stm32h723.elf 
+   text	   data	    bss	    dec	    hex	filename
+  57308	     96	  10412	  67816	  108e8	mtk3bsp_nucleo_stm32h723.elf
+Finished building: default.size.stdout
+ 
+
+21:31:49 Build Finished. 0 errors, 0 warnings. (took 213ms)
+

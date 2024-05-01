@@ -181,6 +181,7 @@ int main(int argc, char *const argv[], char *envp[]) {
     fprintf(stderr, "initRawSocket():Error %s\n", nwdev);
     return -1;
   }
+  printf("soc:%d\n", soc);
 
   FILE *fp;
   fp = fopen(output_name, "wb");
@@ -189,7 +190,6 @@ int main(int argc, char *const argv[], char *envp[]) {
     return 1;
   }
   struct pcap_file_header ghdr = initPcapGlobalHeader();
-  /* fwrite(&ghdr, sizeof(struct pcap_file_header), 1, fp); */
   fwrite(&ghdr, sizeof(struct pcap_file_header), 1, fp);
   fflush(fp);
 
@@ -197,7 +197,7 @@ int main(int argc, char *const argv[], char *envp[]) {
     if ((size = read(soc, buf, sizeof(buf))) <= 0) {
       perror("read");
     } else {
-      /* analyzePacket(buf, size); */
+      /* /* analyzePacket(buf, size); */
       createPcapFile(buf, size, fp);
     }
   }

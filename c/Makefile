@@ -1,6 +1,7 @@
 OBJS = toydump.o analyze.o print.o checksum.o
 SRCS = $(OBJS:%.o=%.c)
-CFLAGS = -g -Wall
+# CFLAGS = -g -Wall
+CFLAGS = -Os
 LDLIBS = 
 TARGET = toydump
 

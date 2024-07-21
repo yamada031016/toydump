@@ -1,5 +1,6 @@
 const std = @import("std");
 const os = std.os;
+const posix = std.posix;
 
 pub const pcapFile = struct {
     const This = @This();
@@ -80,11 +81,11 @@ pub const pcapPacketRecord = extern struct {
     pub fn init(caplen: u32, len: u32) !*This {
         var pprcd = try gpa.allocator().create(This);
         errdefer pprcd.deinit();
-        var tv: os.timeval = .{
+        var tv: posix.timeval = .{
             .tv_sec = 1,
             .tv_usec = 1,
         };
-        var tz: os.timezone = undefined;
+        var tz: posix.timezone = undefined;
         _ = os.linux.gettimeofday(&tv, &tz);
 
         pprcd.ts_sec = @intCast(tv.tv_sec);

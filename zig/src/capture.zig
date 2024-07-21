@@ -1,5 +1,6 @@
 const std = @import("std");
 const os = std.os;
+const posix = std.posix;
 
 const SIOCGIFFLAGS = 0x8913;
 const SIOCSIFFLAGS = 0x8914;
@@ -24,9 +25,9 @@ const IFF = enum(u32) {
 pub const Capture = struct {
     const This = @This();
 
-    sock: os.socket_t,
-    ifreq: os.ifreq,
-    sa: os.sockaddr.ll,
+    sock: posix.socket_t,
+    ifreq: posix.ifreq,
+    sa: posix.sockaddr.ll,
     nic: []const u8,
 
     pub fn init(nicName: []const u8, promiscFlag: bool, ipOnly: bool) !*This {
@@ -35,7 +36,7 @@ pub const Capture = struct {
         errdefer cap.deinit();
 
         const target = if (ipOnly) @byteSwap(@intFromEnum(ETH.IP)) else @byteSwap(@intFromEnum(ETH.ALL));
-        cap.sock = try os.socket(os.linux.PF.PACKET, os.SOCK.RAW, os.IPPROTO.RAW);
+        cap.sock = try posix.socket(os.linux.PF.PACKET, posix.SOCK.RAW, posix.IPPROTO.RAW);
 
         cap.nic = nicName;
 
@@ -57,7 +58,7 @@ pub const Capture = struct {
         cap.sa.protocol = target;
         cap.sa.ifindex = cap.ifreq.ifru.ivalue;
 
-        try os.bind(cap.sock, @ptrCast(&cap.sa), @sizeOf(os.sockaddr.ll));
+        try posix.bind(cap.sock, @ptrCast(&cap.sa), @sizeOf(posix.sockaddr.ll));
 
         if (promiscFlag) {
             try cap._ioctl(SIOCGIFFLAGS);
@@ -79,7 +80,7 @@ pub const Capture = struct {
                     unreachable;
                 }
             },
-            SIOCGIFINDEX => try os.ioctl_SIOCGIFINDEX(this.sock, &this.ifreq),
+            SIOCGIFINDEX => try posix.ioctl_SIOCGIFINDEX(this.sock, &this.ifreq),
             else => unreachable,
         }
     }

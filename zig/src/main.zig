@@ -1,5 +1,6 @@
 const std = @import("std");
 const os = std.os;
+const posix = std.posix;
 const nic = @import("nic.zig");
 const pcapFile = @import("pcap.zig").pcapFile;
 const Capture = @import("capture.zig").Capture;
@@ -13,7 +14,7 @@ fn help() !noreturn {
     try stdout.print("  -i <interface>\n\tspecify NIC name\n", .{});
     try stdout.print("Others:\n", .{});
     try stdout.print("  -h\tdisplay this help message.\n", .{});
-    os.exit(1);
+    posix.exit(1);
 }
 
 const Options = struct {
@@ -125,7 +126,7 @@ pub fn main() !void {
     var pcap = try pcapFile.init(filePath);
 
     while (true) {
-        if (os.read(cap.sock, &buf)) |size| {
+        if (posix.read(cap.sock, &buf)) |size| {
             try pcap.save(&buf, @intCast(size));
         } else |err| {
             std.debug.print("{}", .{err});
